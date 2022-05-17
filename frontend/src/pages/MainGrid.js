@@ -5,7 +5,7 @@ import { useGetSortedBuildingsQuery } from "../app/apiSlice";
 import { useSelector } from "react-redux";
 
 export const MainGrid = () => {
-    const {data, isSuccess, isError, isLoading} = useGetSortedBuildingsQuery({
+    const {isSuccess} = useGetSortedBuildingsQuery({
         maxCost: -1,
         minCost: -1,
         type: -1
@@ -16,13 +16,29 @@ export const MainGrid = () => {
     let content
 
     if (isSuccess) {
-        content = buildings.map((singleBuilding, index) => {
-            return (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                    <Announcement building={singleBuilding}/>
-                </Grid>
+        if (buildings.length === 0) {
+            content = (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'cneter',
+                        alignItems: 'cneter',
+                        height: '50vh',
+                        width: '100%',
+                    }}
+                >
+                    <h1>Объявления не найдены</h1>
+                </Box>   
             )
-        })
+        } else {
+            content = buildings.map((singleBuilding, index) => {
+                return (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                        <Announcement building={singleBuilding}/>
+                    </Grid>
+                )
+            })
+        }
     } 
 
     return (

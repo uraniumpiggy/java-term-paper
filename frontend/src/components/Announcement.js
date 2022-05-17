@@ -1,6 +1,5 @@
 import React from "react";
-import { Button, Card, CardActions, CardContent, CardMedia, Typography, IconButton, CardHeader, Avatar, Chip } from "@mui/material";
-import { Favorite } from "@mui/icons-material";
+import { Button, Card, CardActions, CardContent, CardMedia, Typography, CardHeader, Avatar, Chip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Announcement = ({building}) => {

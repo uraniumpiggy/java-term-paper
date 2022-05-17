@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { setAccessToken, setIsAuth, setTokens } from './userSlice'
+import { logOut, setAccessToken, setIsAuth, setTokens } from './userSlice'
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:8080',
@@ -34,7 +34,7 @@ const baseQueryWrapper = async (args, api, extraOptions) => {
             api.dispatch(setIsAuth(true))
             result = await baseQuery(args, api, extraOptions)
         } else {
-            api.dispatch(setIsAuth(false))
+            api.dispatch(logOut())
             window.location.replace('/')
         }
     }
@@ -117,7 +117,6 @@ export const apiSlice = createApi({
             query: () => ({
                 url: '/api/buildings'
             }),
-            providesTags: ['AllBuildings']
         }),
         getBuildingById: builder.query({
             query: id => ({
@@ -169,6 +168,20 @@ export const apiSlice = createApi({
             query: data => ({
                 url: '/api/buildings/sorted',
                 params: data,
+            }),
+            providesTags: ['AllBuildings']
+        }),
+        selfDeleteUser: builder.mutation({
+            query: id => ({
+                url: `/api/user/self/delete/${id}`,
+                method: 'delete'
+            })
+        }),
+        changePassowrd: builder.mutation({
+            query: credentials => ({
+                url: '/api/password/change',
+                method: 'post',
+                params: credentials
             })
         })
     })
@@ -192,4 +205,6 @@ export const {
     useSetAdminMutation,
     useDeleteBuildingByIdMutation,
     useGetSortedBuildingsQuery,
+    useSelfDeleteUserMutation,
+    useChangePassowrdMutation,
 } = apiSlice

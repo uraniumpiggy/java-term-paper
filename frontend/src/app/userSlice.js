@@ -8,7 +8,6 @@ const initialState = {
     userId: null,
     roles: []
 }
-// logout action not working then server unavaluable
 const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -34,7 +33,6 @@ const userSlice = createSlice({
     extraReducers(builder) {
         builder.addMatcher(apiSlice.endpoints.logInUser.matchFulfilled,
             (state, {payload}) => {
-                console.log(payload)
                 state.access_token = payload.access_token
                 state.refresh_token = payload.refresh_token
                 state.isAuth = true

@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
-import { AppBar, Button, IconButton, InputBase, SwipeableDrawer, Toolbar, ToggleButtonGroup, ToggleButton, TextField } from '@mui/material';
-import { AdminPanelSettings, Home, Menu } from '@mui/icons-material';
+import React, { useState, useRef } from "react";
+import { AppBar, Button, IconButton, SwipeableDrawer, Toolbar, ToggleButtonGroup, ToggleButton, TextField } from '@mui/material';
+import { AdminPanelSettings, Home } from '@mui/icons-material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import { Box } from "@mui/system";
-import { styled, alpha } from '@mui/material/styles';
 import { Link, useNavigate } from "react-router-dom";
 import UserAvatar from "./UserAvatar";
 import { useSelector } from "react-redux";
@@ -16,7 +15,7 @@ const Header = () => {
     const navigate = useNavigate()
     const [alignment, setAlignment] = useState('Все объявления')
     const [filterParams, setFilterParams] = useState(skipToken)
-    const {data: result, isSuccess} = useGetSortedBuildingsQuery(filterParams)
+    const {isSuccess} = useGetSortedBuildingsQuery(filterParams)
 
     const maxValueRef = useRef(null)
     const minValueRef = useRef(null)
@@ -41,10 +40,6 @@ const Header = () => {
   
       setdrawerOpen(open)
     }
-
-    useEffect(() => {
-      console.log(result)
-    }, [isSuccess])
 
     const handleApllyFilters = (event) => {
       event.preventDefault()

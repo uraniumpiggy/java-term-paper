@@ -45,8 +45,6 @@ const Register = () => {
                 username: email,
                 password: password
             }
-            console.log(userData);
-
             try {
                 await registerUser(userData).unwrap()
             } catch (error) {

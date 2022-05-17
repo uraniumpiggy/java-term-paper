@@ -41,11 +41,6 @@ const Auth = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('username'),
-            password: data.get('password'),
-        });
-
 
         let params = new URLSearchParams()
         params.append('username', data.get('username'))

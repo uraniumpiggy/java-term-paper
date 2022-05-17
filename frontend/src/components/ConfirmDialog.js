@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import React from "react";
 
-export const AdminDialog = ({data, open, setOpen}) => {
+export const ConfirmDialog = ({data, open, setOpen}) => {
     const handleClose = () => {
         setOpen(false);
     }

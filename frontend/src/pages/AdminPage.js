@@ -23,7 +23,7 @@ import {
     useSetAdminMutation,
     useDeleteBuildingByIdMutation 
 } from "../app/apiSlice"
-import { AdminDialog } from "../components/AdminDilog"
+import { ConfirmDialog } from "../components/ConfirmDialog"
 
 export const AdminPage = () => {
     const navigate = useNavigate()
@@ -129,7 +129,7 @@ export const AdminPage = () => {
                                     <TableCell align="left">{user.roles.map((role) => role.name.substring(5) + " ")}</TableCell>
                                     <TableCell>
                                         <IconButton
-                                            disabled={isUserAdmin(user) || user.id === userId} 
+                                            disabled={isUserAdmin(user) || user.id === userId || adminLoading} 
                                             onClick={() => {
                                                 handleSetUserAdmin(user.id, user.name)
                                             }}
@@ -139,7 +139,7 @@ export const AdminPage = () => {
                                     </TableCell>
                                     <TableCell>
                                         <IconButton 
-                                            disabled={!isUserAdmin(user) || user.id === userId}
+                                            disabled={!isUserAdmin(user) || user.id === userId || removeAdminLoading}
                                             onClick={() => {
                                                 handleUnsetUserAdmin(user.id, user.name)
                                             }}
@@ -149,7 +149,7 @@ export const AdminPage = () => {
                                     </TableCell>
                                     <TableCell>
                                         <IconButton
-                                            disabled={user.id === userId} 
+                                            disabled={user.id === userId || deleteUserLoading} 
                                             onClick={() => {
                                                 handleDeleteUser(user.id, user.name)
                                             }}
@@ -192,9 +192,11 @@ export const AdminPage = () => {
                                     <TableCell align="left">{building.userName}</TableCell>
                                     <TableCell align="left">{building.comments.length}</TableCell>
                                     <TableCell>
-                                        <IconButton onClick={() => {
-                                            handleDeleteBuilding(building.id)
-                                        }}>
+                                        <IconButton 
+                                            disabled={delPostLoading}
+                                            onClick={() => {
+                                                handleDeleteBuilding(building.id)
+                                            }}>
                                             <Delete/>
                                         </IconButton>
                                     </TableCell>
@@ -214,7 +216,7 @@ export const AdminPage = () => {
 
     return (
         <Box p={3}>
-            <AdminDialog open={openDialog} setOpen={setOpenDialog} data={dialogData}/>
+            <ConfirmDialog open={openDialog} setOpen={setOpenDialog} data={dialogData}/>
             <Box sx={{display: 'flex', padding: '20px'}}>
                 <ButtonGroup>
                     <Button onClick={() => {setSelectedSection(1)}}>Пользователи</Button>
