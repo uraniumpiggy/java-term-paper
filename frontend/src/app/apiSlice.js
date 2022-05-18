@@ -117,6 +117,7 @@ export const apiSlice = createApi({
             query: () => ({
                 url: '/api/buildings'
             }),
+            providesTags: ['AllBuildings']
         }),
         getBuildingById: builder.query({
             query: id => ({

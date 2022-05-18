@@ -21,7 +21,6 @@ export const Comment = ({ commentData }) => {
                         U
                     </Avatar>
                 }
-                // title={building.header}
                 subheader={commentData.nameOfUser}
                 sx={{ textAlign: 'left' }}
             />

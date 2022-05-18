@@ -46,7 +46,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/user/**").hasAnyAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers(
-                "/api/user/save/**",
                 "/building/delete/**",
                 "user/set/admin/**",
                 "user/remove/admin/**",

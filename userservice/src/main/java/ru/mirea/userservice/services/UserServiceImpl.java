@@ -85,6 +85,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepo.findByUsername(username);
     }
 
+
+    @Override
+    public User getUser(Long id) {
+        log.info("Fetching user by id {}", id);
+        return userRepo.getById(id);
+    }
+
     @Override
     public List<User> getUsers() {
         log.info("Fetching all users");
@@ -100,6 +107,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void setAvatar(String username, Image image) {
+        log.info("Setting avatar to user {}", username);
         User user = userRepo.findByUsername(username);
         Long imageId = imageRepo.save(image).getId();
         user.setAvatarId(imageId);
@@ -119,6 +127,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         building.setUserName(user.getName());
         buildingRepo.save(building);
         user.getBuildings().add(building);
+        log.info("Building {} has been successfully added to user {}", building, username);
     }
 
     @Override
@@ -135,6 +144,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         User user = userRepo.findByUsername(username);
         user.getBuildings().remove(building);
+        log.info("Building {} has been deleted", building);
         buildingRepo.deleteById(id);
     }
 
@@ -162,16 +172,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         buildingFromDB.setPrice(building.getPrice());
         buildingFromDB.setLocation(building.getLocation());
         buildingFromDB.setType(building.getType());
+
+        log.info("Building {} has been updated by user {}", building, username);
     }
 
     @Override
     public boolean addAdminRole(Long userId) {
         User user = userRepo.findById(userId).get();
         if (user == null) {
+            log.info("Cannot fetch user by id {} to add admin role", userId);
             return false;
         }
         Role role = roleRepo.findByName("ROLE_ADMIN");
+        if (user.getRoles().contains(role)) {
+            log.info("User {} already has admin rights", user.getName());
+            return false;
+        }
         user.getRoles().add(role);
+        log.info("User {} has got admin rights", user.getName());
         return true;
     }
 
@@ -179,9 +197,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public boolean removeAdminRole(Long userId) {
         User user = userRepo.findById(userId).get();
         if (user == null) {
+            log.info("Cannot fetch user by id {} to remove admin role", userId);
             return false;
         }
         Role role = roleRepo.findByName("ROLE_ADMIN");
+        if (!user.getRoles().contains(role)) {
+            log.info("User {} not have admin rights", user.getName());
+            return false;
+        }
+        log.info("User {} has removed admin rights", user.getName());
         user.getRoles().remove(role);
         return true;
     }
@@ -197,13 +221,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             }
             buildingRepo.deleteById(building.getId());
         }
+        log.info("User {} has been deleted", user.getName());
         userRepo.deleteById(userId);
         return true;
-    }
-
-    @Override
-    public User getUser(Long id) {
-        return userRepo.getById(id);
     }
 
     @Override

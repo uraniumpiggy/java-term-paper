@@ -96,7 +96,6 @@ public class BuildingController {
         List<Building> result = buildingService.getSortedBuildings(maxCost, minCost, type);
         return ResponseEntity.ok().body(result);
     }
-
 }
 
 @Data

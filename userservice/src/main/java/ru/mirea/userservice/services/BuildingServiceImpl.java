@@ -55,6 +55,8 @@ public class BuildingServiceImpl implements BuildingService {
         commentRepo.save(comment);
 
         building.getComments().add(comment);
+
+        log.info("Comment {} has been added to building with id {}", text, buildingId);
         return true;
     }
 
@@ -68,6 +70,7 @@ public class BuildingServiceImpl implements BuildingService {
         User user = userRepo.getById(building.getUserId());
         user.getBuildings().remove(building);
         buildingRepo.deleteById(id);
+        log.info("Building {} has been deleted", building);
     }
 
     @Override
