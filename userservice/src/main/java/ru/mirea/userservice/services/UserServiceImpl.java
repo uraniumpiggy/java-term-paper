@@ -3,10 +3,12 @@ package ru.mirea.userservice.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -196,6 +198,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             buildingRepo.deleteById(building.getId());
         }
         userRepo.deleteById(userId);
+        return true;
+    }
+
+    @Override
+    public User getUser(Long id) {
+        return userRepo.getById(id);
+    }
+
+    @Override
+    public boolean changePassword(String username, String newPass) {
+        User user = userRepo.findByUsername(username);
+        if (user == null) {
+            return false;
+        }
+        String encryptedNewPassword = passwordEncoder.encode(newPass);
+        user.setPassword(encryptedNewPassword);
         return true;
     }
 }

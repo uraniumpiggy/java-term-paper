@@ -15,7 +15,6 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public ResponseEntity registerUser(@RequestBody User user) {
-        System.out.println(user);
         if (userService.saveUser(user) == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }

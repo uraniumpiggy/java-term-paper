@@ -4,24 +4,15 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.mirea.userservice.entities.Building;
-import ru.mirea.userservice.entities.Image;
 import ru.mirea.userservice.entities.User;
-import ru.mirea.userservice.repo.ImageRepo;
 import ru.mirea.userservice.roles.Role;
 import ru.mirea.userservice.services.UserService;
 
@@ -61,7 +52,6 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
-    //set admin
     @RequestMapping(value = "user/set/admin/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> addAdminRole(@PathVariable Long id) {
         if (userService.addAdminRole(id)) {
@@ -70,7 +60,6 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
-    // remove admin
     @RequestMapping(value = "user/remove/admin/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> removeAdminRole(@PathVariable Long id) {
         if (userService.removeAdminRole(id)) {
@@ -79,11 +68,32 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
-    //deleteUser
     @RequestMapping(value = "user/delete/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("user/self/delete/{id}")
+    public ResponseEntity<?> deleteUserNoAdmin(@PathVariable Long id, Authentication authentication) {
+        User user = userService.getUser(id);
+        String name = authentication.getName();
+        if (user.getUsername().equals(name)) {
+            userService.deleteUser(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping(value = "password/change")
+    public ResponseEntity<?> changePassword(
+            Authentication authentication,
+            @RequestParam(name = "newPass") String newPassword) {
+        System.out.println();
+        if (userService.changePassword(authentication.getName(), newPassword)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/role/save")

@@ -15,6 +15,7 @@ public interface UserService {
     Role saveRole(Role role);
     void addRoleToUser(String username, String roleName);
     User getUser(String username);
+    User getUser(Long id);
     List<User> getUsers();
     Image getAvatar(Long id);
     void setAvatar(String username, Image image);
@@ -25,4 +26,5 @@ public interface UserService {
     boolean addAdminRole(Long userId);
     boolean removeAdminRole(Long userId);
     boolean deleteUser(Long userId);
+    boolean changePassword(String username, String newPass);
 }
