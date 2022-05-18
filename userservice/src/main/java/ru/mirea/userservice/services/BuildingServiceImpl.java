@@ -15,6 +15,7 @@ import ru.mirea.userservice.repo.UserRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
 public class BuildingServiceImpl implements BuildingService {
@@ -67,5 +68,30 @@ public class BuildingServiceImpl implements BuildingService {
         User user = userRepo.getById(building.getUserId());
         user.getBuildings().remove(building);
         buildingRepo.deleteById(id);
+    }
+
+    @Override
+    public List<Building> getSortedBuildings(Long maxCost, Long minCost, int type) {
+        List<Building> result = buildingRepo.findAll().stream()
+                .filter(
+                        item -> {
+                            if (minCost == -1 && maxCost == -1) {
+                                return true;
+                            } else if (minCost != -1 && maxCost == -1 && item.getPrice() >= minCost) {
+                                return true;
+                            } else if (maxCost != -1 && minCost == -1 && item.getPrice() <= maxCost) {
+                                return true;
+                            } else if (minCost != -1 && maxCost != -1 && item.getPrice() >= minCost && item.getPrice() <= maxCost) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                )
+                .filter(
+                        item -> item.getType() == type || type == -1
+                )
+                .collect(Collectors.toList());
+        return result;
     }
 }

@@ -8,4 +8,5 @@ public interface BuildingService {
     Building getBuilding(Long id);
     boolean addCommentToBuilding(Long buildingId, String text, Long userId, String nameOfUser);
     void deleteBuilding(Long id);
+    List<Building> getSortedBuildings(Long maxCost, Long minCost, int type);
 }

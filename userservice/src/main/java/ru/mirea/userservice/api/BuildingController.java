@@ -2,30 +2,23 @@ package ru.mirea.userservice.api;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.mirea.userservice.entities.Building;
-import ru.mirea.userservice.repo.BuildingRepo;
 import ru.mirea.userservice.services.BuildingService;
 import ru.mirea.userservice.services.UserService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class BuildingController {
     @Autowired
     UserService userService;
-    @Autowired
-    BuildingRepo buildingRepo;
     @Autowired
     BuildingService buildingService;
 
@@ -100,26 +93,7 @@ public class BuildingController {
             @RequestParam(name = "minCost") Long minCost,
             @RequestParam(name = "maxCost") Long maxCost,
             @RequestParam(name = "type") int type) {
-        List<Building> result = buildingService.getAllBuildings().stream()
-                .filter(
-                     item -> {
-                         if (minCost == -1 && maxCost == -1) {
-                             return true;
-                         } else if (minCost != -1 && maxCost == -1 && item.getPrice() >= minCost) {
-                             return true;
-                         } else if (maxCost != -1 && minCost == -1 && item.getPrice() <= maxCost) {
-                             return true;
-                         } else if (minCost != -1 && maxCost != -1 && item.getPrice() >= minCost && item.getPrice() <= maxCost) {
-                             return true;
-                         } else {
-                             return false;
-                         }
-                     }
-                )
-                .filter(
-                        item -> item.getType() == type || type == -1
-                )
-                .collect(Collectors.toList());
+        List<Building> result = buildingService.getSortedBuildings(maxCost, minCost, type);
         return ResponseEntity.ok().body(result);
     }
 
