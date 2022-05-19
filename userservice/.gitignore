@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Production ###
+!/target/userservice-0.0.1-SNAPSHOT.jar
