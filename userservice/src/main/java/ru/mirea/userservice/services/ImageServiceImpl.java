@@ -1,6 +1,7 @@
 package ru.mirea.userservice.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +11,7 @@ import ru.mirea.userservice.repo.ImageRepo;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 
 @Service @Transactional @Slf4j
@@ -23,10 +25,11 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void saveUnknownPersonImage() throws IOException {
-        File unknownUserPhoto = new File("src/main/resources/static/unknown_person.jpg");
+//        File unknownUserPhoto = new File("src/main/resources/static/images/unknown_person.jpg");
         Image photo = new Image();
         photo.setName("unknown_person");
-        photo.setContent(Files.readAllBytes(unknownUserPhoto.toPath()));
+//        photo.setContent(Files.readAllBytes(unknownUserPhoto.toPath()));
+        photo.setContent(getClass().getResourceAsStream("/static/images/unknown_person.jpg").readAllBytes());
         Long id = imageRepo.save(photo).getId();
         this.unknownPicId = id;
     }

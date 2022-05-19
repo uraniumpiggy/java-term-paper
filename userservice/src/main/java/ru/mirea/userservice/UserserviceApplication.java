@@ -6,16 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.multipart.MultipartFile;
-import ru.mirea.userservice.entities.Image;
 import ru.mirea.userservice.entities.User;
-import ru.mirea.userservice.repo.ImageRepo;
 import ru.mirea.userservice.roles.Role;
 import ru.mirea.userservice.services.ImageService;
 import ru.mirea.userservice.services.UserService;
 
-import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 @SpringBootApplication
@@ -33,15 +28,15 @@ public class UserserviceApplication {
 	@Bean
 	CommandLineRunner run(UserService userService, ImageService imageService) {
 		return args -> {
-//			userService.saveRole(new Role(null, "ROLE_USER"));
-//			userService.saveRole(new Role(null, "ROLE_ADMIN"));
-//
-//			userService.saveUser(new User(null, "John", "john@gmail.com", "1234", new ArrayList<>(), new ArrayList<>(), null));
-//			userService.saveUser(new User(null, "Arnold", "arnold@gmail.com", "1234", new ArrayList<>(), new ArrayList<>(), null));
-//
-//			userService.addRoleToUser("john@gmail.com", "ROLE_USER");
-//			userService.addRoleToUser("arnold@gmail.com", "ROLE_USER");
-//			userService.addRoleToUser("arnold@gmail.com", "ROLE_ADMIN");	
+			userService.saveRole(new Role(null, "ROLE_USER"));
+			userService.saveRole(new Role(null, "ROLE_ADMIN"));
+
+			userService.saveUser(new User(null, "John", "john@gmail.com", "1234", new ArrayList<>(), new ArrayList<>(), null));
+			userService.saveUser(new User(null, "Arnold", "arnold@gmail.com", "1234", new ArrayList<>(), new ArrayList<>(), null));
+
+			userService.addRoleToUser("john@gmail.com", "ROLE_USER");
+			userService.addRoleToUser("arnold@gmail.com", "ROLE_USER");
+			userService.addRoleToUser("arnold@gmail.com", "ROLE_ADMIN");	
 			imageService.saveUnknownPersonImage();
 		};
 	}

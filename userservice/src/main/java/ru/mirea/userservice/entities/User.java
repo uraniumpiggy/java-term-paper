@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Entity @NoArgsConstructor @AllArgsConstructor
+@Entity @AllArgsConstructor @NoArgsConstructor
 @Table(name = "users")
 public class User {
     @Id

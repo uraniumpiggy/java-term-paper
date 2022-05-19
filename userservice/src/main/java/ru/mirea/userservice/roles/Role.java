@@ -9,8 +9,8 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "t_roles")
 public class Role {
     @Id
